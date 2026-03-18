@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      security-events: write
+      security-events: write  # ← add this back
 
     container:
       image: semgrep/semgrep
@@ -32,8 +32,8 @@ jobs:
             --config p/owasp-top-ten \
             --config p/secrets \
             --config p/supply-chain \
-            --sarif \
-            --output semgrep.sarif \
+            --sarif \                  # ← add this
+            --output semgrep.sarif \  # ← add this
             --exclude "hellen-ext-v2/chunks/**" \
             --exclude "hellen-ext-v2/assets/**" \
             --exclude "hellen-ext-v2/background.js" \
