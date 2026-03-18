@@ -47,7 +47,7 @@ var mainWorld = (function() {
         }
         window.addEventListener("message", handleMessage);
       });
-      const targetOrigin = window.location.origin === "null" ? "*" : window.location.origin;
+      const targetOrigin = window.location.origin;
       window.postMessage(
         {
           channel: "PAGE_AGENT_EXT_REQUEST",
@@ -69,7 +69,7 @@ var mainWorld = (function() {
     };
     const stop = () => {
       const id = getId();
-      const targetOrigin = window.location.origin === "null" ? "*" : window.location.origin;
+      const targetOrigin = window.location.origin;
       window.postMessage(
         {
           channel: "PAGE_AGENT_EXT_REQUEST",
