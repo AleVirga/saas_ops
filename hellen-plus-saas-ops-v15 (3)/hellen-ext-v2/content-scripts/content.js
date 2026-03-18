@@ -2183,7 +2183,7 @@ ${scrollHintAbove}`;
                 action: "execute_result",
                 error: "Agent is already running a task. Please wait until it finishes."
               },
-              "*"
+              window.location.origin
             );
             return;
           }
@@ -2200,7 +2200,7 @@ ${scrollHintAbove}`;
                   action: "status_change_event",
                   payload: multiPageAgent.status
                 },
-                "*"
+                window.location.origin
               );
             });
             multiPageAgent.addEventListener("activity", (event) => {
@@ -2212,7 +2212,7 @@ ${scrollHintAbove}`;
                   action: "activity_event",
                   payload: event.detail
                 },
-                "*"
+                window.location.origin
               );
             });
             multiPageAgent.addEventListener("historychange", (event) => {
@@ -2224,7 +2224,7 @@ ${scrollHintAbove}`;
                   action: "history_change_event",
                   payload: multiPageAgent.history
                 },
-                "*"
+                window.location.origin
               );
             });
             const result2 = await multiPageAgent.execute(task);
@@ -2235,7 +2235,7 @@ ${scrollHintAbove}`;
                 action: "execute_result",
                 payload: result2
               },
-              "*"
+              window.location.origin
             );
           } catch (error) {
             window.postMessage(
@@ -2245,7 +2245,7 @@ ${scrollHintAbove}`;
                 action: "execute_result",
                 error: error.message
               },
-              "*"
+              window.location.origin
             );
           }
           break;
@@ -2437,7 +2437,7 @@ ${scrollHintAbove}`;
         type: ContentScriptContext2.SCRIPT_STARTED_MESSAGE_TYPE,
         contentScriptName: this.contentScriptName,
         messageId: this.id
-      }, "*");
+      }, window.location.origin);
     }
     verifyScriptStartedEvent(event) {
       const isSameContentScript = event.detail?.contentScriptName === this.contentScriptName;
