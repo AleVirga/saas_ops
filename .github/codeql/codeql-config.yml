@@ -1,0 +1,8 @@
+name: CodeQL Config
+
+paths-ignore:
+  - "hellen-ext-v2/chunks/**"
+  - "hellen-ext-v2/assets/**"
+  - "hellen-ext-v2/background.js"
+  - "hellen-ext-v2/main-world.js"
+  - "hellen-ext-v2/content-scripts/content.js"
