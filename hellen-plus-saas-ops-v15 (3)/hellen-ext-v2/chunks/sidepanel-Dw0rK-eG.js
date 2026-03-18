@@ -33212,25 +33212,28 @@ function normalizeUrl(rawUrl) {
     const u = new URL(rawUrl);
     // Known SaaS apps: normalize to base domain + app tenant identifier
     const host = u.hostname;
+    function isDomain(h, domain) {
+      return h === domain || h.endsWith("." + domain);
+    }
     // Workday: wd103.myworkday.com/cocacolahellenic/... -> myworkday.com (tenant: cocacolahellenic)
-    if (host.includes("myworkday.com")) {
+    if (isDomain(host, "myworkday.com")) {
       const tenant = u.pathname.split("/").filter(Boolean)[0] || "";
       return "https://" + host + (tenant ? "/" + tenant : "");
     }
     // Salesforce: xxx.lightning.force.com or xxx.salesforce.com
-    if (host.includes("salesforce.com") || host.includes("force.com")) {
+    if (isDomain(host, "salesforce.com") || isDomain(host, "force.com")) {
       return "https://" + host;
     }
     // Workday learning, peakon, etc.
-    if (host.includes("workday.com")) {
+    if (isDomain(host, "workday.com")) {
       return "https://" + host;
     }
     // SAP SuccessFactors
-    if (host.includes("successfactors.com") || host.includes("sapsf.com")) {
+    if (isDomain(host, "successfactors.com") || isDomain(host, "sapsf.com")) {
       return "https://" + host;
     }
     // ServiceNow: tenant.service-now.com
-    if (host.includes("service-now.com")) {
+    if (isDomain(host, "service-now.com")) {
       return "https://" + host;
     }
     // HubSpot, Zendesk, Jira, etc — strip query & fragment, keep path up to 2 segments
