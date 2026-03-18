@@ -1,0 +1,46 @@
+name: Semgrep SAST
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    - cron: "0 4 * * 1"  # every Monday at 04:00 UTC
+
+permissions: read-all
+
+jobs:
+  semgrep:
+    name: Semgrep Scan
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+
+    container:
+      image: semgrep/semgrep
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4
+
+      - name: Run Semgrep
+        run: |
+          semgrep scan \
+            --config p/security-audit \
+            --config p/owasp-top-ten \
+            --config p/secrets \
+            --config p/supply-chain \
+            --sarif \
+            --output semgrep.sarif \
+            --exclude "hellen-ext-v2/chunks/**" \
+            --exclude "hellen-ext-v2/assets/**" \
+            --exclude "hellen-ext-v2/background.js" \
+            --exclude "hellen-ext-v2/content-scripts/content.js"
+
+      - name: Upload Semgrep results to GitHub
+        uses: github/codeql-action/upload-sarif@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858  # v3
+        with:
+          sarif_file: semgrep.sarif
+        if: always()
