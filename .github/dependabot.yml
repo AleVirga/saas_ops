@@ -1,0 +1,37 @@
+# .github/dependabot.yml
+# Keeps npm dependencies and GitHub Actions up to date automatically.
+# Docs: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+
+updates:
+  # ── npm (Chrome extension source dependencies) ──────────────────────────────
+  - package-ecosystem: "npm"
+    directory: "/"          # location of package.json; adjust if it lives in a subdirectory
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Athens"
+    open-pull-requests-limit: 10
+    versioning-strategy: lockfile-only   # avoids unwanted semver range bumps
+    labels:
+      - "dependencies"
+      - "npm"
+    commit-message:
+      prefix: "chore(deps)"
+
+  # ── GitHub Actions ───────────────────────────────────────────────────────────
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Athens"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "chore(ci)"
