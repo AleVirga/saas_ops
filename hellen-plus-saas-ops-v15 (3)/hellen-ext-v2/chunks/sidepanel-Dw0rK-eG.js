@@ -21563,11 +21563,13 @@ const _OpenAIClient = class _OpenAIClient2 {
     modelPatch(requestBody);
     let response;
     try {
-      response = await this.fetch(`${this.config.baseURL}/chat/completions${this.config.baseURL.includes("apigateway.cchellenic.com") ? "?api-version=2024-02-15-preview" : ""}`, {
+      const _baseHost = (() => { try { return new URL(this.config.baseURL).hostname; } catch { return ""; } })();
+      const _isAzureHost = _baseHost === "apigateway.cchellenic.com" || _baseHost.endsWith(".apigateway.cchellenic.com") || _baseHost === "openai.azure.com" || _baseHost.endsWith(".openai.azure.com");
+      response = await this.fetch(`${this.config.baseURL}/chat/completions${_baseHost === "apigateway.cchellenic.com" || _baseHost.endsWith(".apigateway.cchellenic.com") ? "?api-version=2024-02-15-preview" : ""}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          ...(this.config.baseURL.includes(".openai.azure.com") || this.config.baseURL.includes("apigateway.cchellenic.com") ? {"api-key": this.config.apiKey} : {Authorization: `Bearer ${this.config.apiKey}`})
+          ...(_isAzureHost ? {"api-key": this.config.apiKey} : {Authorization: `Bearer ${this.config.apiKey}`})
         },
         body: JSON.stringify(requestBody),
         signal: abortSignal
