@@ -2058,6 +2058,8 @@ ${scrollHintAbove}`;
       return pageController;
     }
     window.setInterval(async () => {
+      if (!chrome.runtime?.id) return;
+      try {
       const agentHeartbeat = (await chrome.storage.local.get("agentHeartbeat")).agentHeartbeat;
       const now = Date.now();
       const agentInTouch = typeof agentHeartbeat === "number" && now - agentHeartbeat < 2e3;
@@ -2079,6 +2081,10 @@ ${scrollHintAbove}`;
           pageController.dispose();
           pageController = null;
         }
+      }
+      } catch (e) {
+        if (e?.message?.includes("Extension context invalidated")) return;
+        throw e;
       }
     }, 500);
     chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
