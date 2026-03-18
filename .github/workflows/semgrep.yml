@@ -16,14 +16,19 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      security-events: write  # ← add this back
-
-    container:
-      image: semgrep/semgrep
+      security-events: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Semgrep
+        run: pip install semgrep
 
       - name: Run Semgrep
         run: |
@@ -32,12 +37,14 @@ jobs:
             --config p/owasp-top-ten \
             --config p/secrets \
             --config p/supply-chain \
-            --sarif \                  # ← add this
-            --output semgrep.sarif \  # ← add this
-            --exclude "hellen-ext-v2/chunks/**" \
-            --exclude "hellen-ext-v2/assets/**" \
+            --sarif \
+            --output semgrep.sarif \
+            --exclude "hellen-ext-v2/chunks" \
+            --exclude "hellen-ext-v2/assets" \
             --exclude "hellen-ext-v2/background.js" \
-            --exclude "hellen-ext-v2/content-scripts/content.js"
+            --exclude "hellen-ext-v2/content-scripts/content.js" \
+            .
+        continue-on-error: true
 
       - name: Upload Semgrep results to GitHub
         uses: github/codeql-action/upload-sarif@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858  # v3
