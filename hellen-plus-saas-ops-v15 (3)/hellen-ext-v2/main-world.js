@@ -20,6 +20,7 @@ var mainWorld = (function() {
       const id = getId();
       const promise = new Promise((resolve, reject) => {
         function handleMessage(e) {
+          if (e.origin !== window.location.origin) return;
           const data = e.data;
           if (typeof data !== "object" || data === null) return;
           if (data.channel !== "PAGE_AGENT_EXT_RESPONSE") return;
