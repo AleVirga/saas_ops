@@ -47,6 +47,7 @@ var mainWorld = (function() {
         }
         window.addEventListener("message", handleMessage);
       });
+      const targetOrigin = window.location.origin === "null" ? "*" : window.location.origin;
       window.postMessage(
         {
           channel: "PAGE_AGENT_EXT_REQUEST",
@@ -62,19 +63,20 @@ var mainWorld = (function() {
             }
           }
         },
-        "*"
+        targetOrigin
       );
       return promise;
     };
     const stop = () => {
       const id = getId();
+      const targetOrigin = window.location.origin === "null" ? "*" : window.location.origin;
       window.postMessage(
         {
           channel: "PAGE_AGENT_EXT_REQUEST",
           id,
           action: "stop"
         },
-        "*"
+        targetOrigin
       );
     };
     window.PAGE_AGENT_EXT_VERSION = "1.5.7";
