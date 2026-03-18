@@ -2168,6 +2168,7 @@ ${scrollHintAbove}`;
     console.log("[PageAgentExt]: MultiPageAgent loaded");
     let multiPageAgent = null;
     window.addEventListener("message", async (e) => {
+      if (e.origin !== window.location.origin) return;
       const data = e.data;
       if (typeof data !== "object" || data === null) return;
       if (data.channel !== "PAGE_AGENT_EXT_REQUEST") return;
